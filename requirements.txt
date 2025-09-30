@@ -1,6 +1,12 @@
 Flask==2.3.3
 Werkzeug==2.3.7
 
+# Production WSGI server
+gunicorn==21.2.0
+
+# Caching (optional)
+redis==5.0.1
+
 # Testing dependencies
 pytest==7.4.3
 pytest-cov==4.1.0
