@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--
+    Calculator HTML Template
+    
+    A modern, responsive calculator interface with glassmorphism design.
+    Features both basic arithmetic and advanced scientific functions.
+    
+    Structure:
+    - Mode toggle for switching between basic and advanced modes
+    - Display area for showing current input and results
+    - Basic calculator panel with numbers, operators, and functions
+    - Advanced panel with scientific functions and memory operations
+    
+    Author: AI Assistant
+    Version: 1.0.0
+    License: MIT
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fancy Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="calculator" id="calculator">
+            <div class="mode-toggle">
+                <button class="mode-btn active" id="basicMode" onclick="switchMode('basic')">Basic</button>
+                <button class="mode-btn" id="advancedMode" onclick="switchMode('advanced')">Advanced</button>
+            </div>
+            
+            <div class="calculator-content">
+                <!-- Basic Calculator Panel -->
+                <div class="basic-panel">
+                    <div class="display">
+                        <div class="display-text" id="display">0</div>
+                    </div>
+                    
+                    <div class="buttons">
+                        <!-- Row 1 -->
+                        <button class="btn btn-function" onclick="clearAll()">C</button>
+                        <button class="btn btn-function" onclick="clearEntry()">CE</button>
+                        <button class="btn btn-function" onclick="backspace()">⌫</button>
+                        <button class="btn btn-operator" onclick="setOperator('÷')">÷</button>
+                        
+                        <!-- Row 2 -->
+                        <button class="btn btn-number" onclick="appendToDisplay('7')">7</button>
+                        <button class="btn btn-number" onclick="appendToDisplay('8')">8</button>
+                        <button class="btn btn-number" onclick="appendToDisplay('9')">9</button>
+                        <button class="btn btn-operator" onclick="setOperator('×')">×</button>
+                        
+                        <!-- Row 3 -->
+                        <button class="btn btn-number" onclick="appendToDisplay('4')">4</button>
+                        <button class="btn btn-number" onclick="appendToDisplay('5')">5</button>
+                        <button class="btn btn-number" onclick="appendToDisplay('6')">6</button>
+                        <button class="btn btn-operator" onclick="setOperator('-')">-</button>
+                        
+                        <!-- Row 4 -->
+                        <button class="btn btn-number" onclick="appendToDisplay('1')">1</button>
+                        <button class="btn btn-number" onclick="appendToDisplay('2')">2</button>
+                        <button class="btn btn-number" onclick="appendToDisplay('3')">3</button>
+                        <button class="btn btn-operator" onclick="setOperator('+')">+</button>
+                        
+                        <!-- Row 5 -->
+                        <button class="btn btn-number btn-zero" onclick="appendToDisplay('0')">0</button>
+                        <button class="btn btn-number" onclick="appendToDisplay('.')">.</button>
+                        <button class="btn btn-equals" onclick="calculate()">=</button>
+                    </div>
+                </div>
+                
+                <!-- Advanced Panel (hidden by default) -->
+                <div class="advanced-panel" id="advancedPanel">
+                    <div class="advanced-buttons">
+                        <!-- Memory Functions -->
+                        <button class="btn btn-memory" onclick="memoryClear()">MC</button>
+                        <button class="btn btn-memory" onclick="memoryRecall()">MR</button>
+                        <button class="btn btn-memory" onclick="memoryAdd()">M+</button>
+                        <button class="btn btn-memory" onclick="memorySubtract()">M-</button>
+                        
+                        <!-- Scientific Functions -->
+                        <button class="btn btn-scientific" onclick="scientificFunction('sin')">sin</button>
+                        <button class="btn btn-scientific" onclick="scientificFunction('cos')">cos</button>
+                        <button class="btn btn-scientific" onclick="scientificFunction('tan')">tan</button>
+                        <button class="btn btn-scientific" onclick="scientificFunction('log')">log</button>
+                        
+                        <!-- More Scientific Functions -->
+                        <button class="btn btn-scientific" onclick="scientificFunction('ln')">ln</button>
+                        <button class="btn btn-scientific" onclick="scientificFunction('sqrt')">√</button>
+                        <button class="btn btn-scientific" onclick="scientificFunction('pow')">x²</button>
+                        <button class="btn btn-scientific" onclick="scientificFunction('factorial')">x!</button>
+                        
+                        <!-- Constants and More -->
+                        <button class="btn btn-constant" onclick="appendToDisplay('3.14159')">π</button>
+                        <button class="btn btn-constant" onclick="appendToDisplay('2.71828')">e</button>
+                        <button class="btn btn-scientific" onclick="scientificFunction('abs')">|x|</button>
+                        <button class="btn btn-scientific" onclick="scientificFunction('negate')">±</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
