@@ -579,13 +579,29 @@ cursor_test/
 
 ## 📋 Version Information
 
-### **Current Version: v 0.20**
-- **Release Date**: September 30, 2025, 2025, 2025, 2025, 2025, 2025, 2025, 2025, 2025, 2025, 2025, 2025, 2025, 2025, 2024
+### **Current Version: v 0.8**
+- **Release Date**: September 30, 2025, 2025
 - **Status**: Stable Production Release
 - **Compatibility**: Python 3.8+, Modern Browsers
 
 ### **Version History**
-- **v 0.5** (Current) - Added live timestamp, version dialog, comprehensive testing
+- **v 0.7** - Version reset by user decision - comprehensive rate limiting tests and verification
+- **v 0.20** - Verified rate limiting functionality with comprehensive testing
+- **v 0.19** - Added comprehensive rate limiting tests
+- **v 0.18** - Added comprehensive rate limiting tests
+- **v 0.17** - Final test of complete pre-commit pipeline with all features
+- **v 0.16** - Added README documentation check to pre-commit pipeline
+- **v 0.15** - Test commit with version-only README changes - should warn but proceed
+- **v 0.14** - Test commit without README update - should fail
+- **v 0.13** - Test commit without README update - should fail
+- **v 0.12** - Test commit with proper README documentation - should pass
+- **v 0.11** - Test commit with only version changes - should fail
+- **v 0.10** - Test commit without README update - should fail
+- **v 0.9** - Test commit without README update
+- **v 0.8** - Added static code analysis to pre-commit pipeline
+- **v 0.7** - Added automated version increment during commit
+- **v 0.6** - Updated event handling, comprehensive testing, Docker optimization
+- **v 0.5** - Added live timestamp, version dialog, comprehensive testing
 - **v 0.4** - Added pre-commit hooks, security enhancements, caching system
 - **v 0.3** - Added advanced calculator mode, scientific functions, memory operations
 - **v 0.2** - Added Docker containerization, production deployment
