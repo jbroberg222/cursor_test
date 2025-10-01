@@ -498,6 +498,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 memorySubtract();
                 break;
                 
+            case 'toggle-upside-down':
+                console.log(`[DEBUG] Upside-down toggle button clicked`);
+                toggleUpsideDown();
+                break;
+                
             case 'scientific':
                 const functionName = button.dataset.function;
                 console.log(`[DEBUG] Scientific function button clicked - Function: "${functionName}"`);
@@ -556,6 +561,37 @@ function switchMode(mode) {
         basicBtn.classList.remove('active');
         calculator.classList.add('advanced-mode');
         console.log(`[DEBUG] switchMode() - Advanced mode activated - isAdvancedMode: ${isAdvancedMode}`);
+    }
+}
+
+/**
+ * Toggles upside-down text mode for the entire calculator.
+ * Rotates all text elements 180 degrees for a fun effect.
+ */
+function toggleUpsideDown() {
+    console.log(`[DEBUG] toggleUpsideDown() called`);
+    
+    const calculator = document.getElementById('calculator');
+    const toggleBtn = document.getElementById('upsideDownToggle');
+    
+    console.log(`[DEBUG] toggleUpsideDown() - Found elements: calculator=${!!calculator}, toggleBtn=${!!toggleBtn}`);
+    
+    if (calculator && toggleBtn) {
+        const isUpsideDown = calculator.classList.contains('upside-down-mode');
+        
+        if (isUpsideDown) {
+            console.log(`[DEBUG] toggleUpsideDown() - Disabling upside-down mode`);
+            calculator.classList.remove('upside-down-mode');
+            toggleBtn.classList.remove('active');
+        } else {
+            console.log(`[DEBUG] toggleUpsideDown() - Enabling upside-down mode`);
+            calculator.classList.add('upside-down-mode');
+            toggleBtn.classList.add('active');
+        }
+        
+        console.log(`[DEBUG] toggleUpsideDown() - Mode toggled successfully`);
+    } else {
+        console.log(`[DEBUG] toggleUpsideDown() - Required elements not found`);
     }
 }
 

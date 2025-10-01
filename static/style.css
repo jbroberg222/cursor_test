@@ -170,6 +170,43 @@ body {
     color: white;
 }
 
+.upside-down-toggle {
+    flex: 0 0 auto !important;
+    min-width: 48px;
+    font-size: 1.2rem !important;
+    padding: 8px !important;
+}
+
+.upside-down-toggle.active {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: rotate(180deg);
+}
+
+/* Upside-down text mode */
+.upside-down-mode {
+    transform: rotate(180deg);
+}
+
+.upside-down-mode .display-text {
+    transform: rotate(180deg);
+}
+
+.upside-down-mode .mode-btn {
+    transform: rotate(180deg);
+}
+
+.upside-down-mode .btn {
+    transform: rotate(180deg);
+}
+
+.upside-down-mode .version {
+    transform: rotate(180deg);
+}
+
+.upside-down-mode .timestamp {
+    transform: rotate(180deg);
+}
+
 .display {
     background: rgba(0, 0, 0, 0.2);
     border-radius: 16px;
