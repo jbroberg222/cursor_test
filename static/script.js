@@ -93,7 +93,7 @@ function showVersionDialog() {
     
     // Create dialog content
     dialog.innerHTML = `
-        <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 600;">Calculator v 0.17</h3>
+        <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 600;">Calculator v 1.0</h3>
         <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.5; opacity: 0.9;">
             Brought to you by Jeff Broberg and his buddy cursor.ai
         </p>
@@ -138,11 +138,53 @@ function showVersionDialog() {
 }
 
 /**
+ * Formats a number with appropriate commas and decimal places.
+ * @param {string|number} value - The value to format
+ * @returns {string} - The formatted number string
+ */
+function formatNumber(value) {
+    // Convert to string if it's a number
+    const str = value.toString();
+    
+    // Handle special cases
+    if (str === 'Error' || str === 'Infinity' || str === '-Infinity' || str === 'NaN') {
+        return str;
+    }
+    
+    // Handle scientific notation
+    if (str.includes('e') || str.includes('E')) {
+        return str;
+    }
+    
+    // Split into integer and decimal parts
+    const parts = str.split('.');
+    const integerPart = parts[0];
+    const decimalPart = parts[1];
+    
+    // Add commas to integer part
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    
+    // Combine with decimal part if it exists
+    if (decimalPart !== undefined) {
+        // Limit decimal places to 10 for display
+        const limitedDecimal = decimalPart.length > 10 ? decimalPart.substring(0, 10) : decimalPart;
+        return formattedInteger + '.' + limitedDecimal;
+    }
+    
+    return formattedInteger;
+}
+
+/**
  * Updates the calculator display with the current input value.
+ * Formats numbers with commas for better readability.
  */
 function updateDisplay() {
     console.log(`[DEBUG] updateDisplay() called - Setting display to: "${currentInput}"`);
-    display.textContent = currentInput;
+    
+    // Format the number for display
+    const formattedValue = formatNumber(currentInput);
+    display.textContent = formattedValue;
+    
     console.log(`[DEBUG] updateDisplay() completed - Display now shows: "${display.textContent}"`);
 }
 

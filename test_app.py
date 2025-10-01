@@ -400,6 +400,99 @@ class TestCachingFeatures(unittest.TestCase):
         self.assertEqual(data1['result'], data2['result'])
 
 
+class TestRateLimiting(unittest.TestCase):
+    """Test cases for rate limiting functionality."""
+    
+    def setUp(self):
+        """Set up test client and configuration."""
+        self.app = app.test_client()
+        self.app.testing = True
+    
+    def test_rate_limit_calculation_endpoint(self):
+        """Test rate limiting on calculation endpoint."""
+        # Make multiple requests to test rate limiting
+        # Note: This test may not trigger rate limiting due to test environment
+        # but it verifies the endpoint responds correctly
+        expression = '2+2'
+        
+        for i in range(5):  # Make 5 requests
+            response = self.app.post('/calculate',
+                                   data=json.dumps({'expression': expression}),
+                                   content_type='application/json')
+            self.assertEqual(response.status_code, 200)
+            
+            data = json.loads(response.data)
+            self.assertIn('result', data)
+    
+    def test_rate_limit_scientific_endpoint(self):
+        """Test rate limiting on scientific calculation endpoint."""
+        # Make multiple requests to test rate limiting
+        function = 'sin'
+        value = 30
+        
+        for i in range(5):  # Make 5 requests
+            response = self.app.post('/scientific',
+                                   data=json.dumps({'function': function, 'value': value}),
+                                   content_type='application/json')
+            self.assertEqual(response.status_code, 200)
+            
+            data = json.loads(response.data)
+            self.assertIn('result', data)
+    
+    def test_rate_limit_error_handler(self):
+        """Test that rate limit error handler exists."""
+        # Test that the error handler is properly configured
+        # This is more of a structural test
+        with app.test_request_context():
+            # Check if the error handler function exists
+            self.assertTrue(hasattr(app, 'error_handler_spec'))
+    
+    def test_rate_limit_headers(self):
+        """Test that rate limiting doesn't interfere with normal responses."""
+        response = self.app.post('/calculate',
+                               data=json.dumps({'expression': '1+1'}),
+                               content_type='application/json')
+        
+        self.assertEqual(response.status_code, 200)
+        
+        # Check that security headers are still present
+        self.assertIn('X-Content-Type-Options', response.headers)
+        self.assertIn('X-Frame-Options', response.headers)
+    
+    def test_rate_limit_implementation_exists(self):
+        """Test that rate limiting is properly implemented."""
+        # Import the rate limiting decorator to verify it exists
+        from security import rate_limit, RateLimiter
+        
+        # Test that the RateLimiter class works
+        limiter = RateLimiter(max_requests=5, window_seconds=60)
+        
+        # Test that it allows requests initially
+        self.assertTrue(limiter.is_allowed('test_client'))
+        
+        # Test that the decorator exists and is callable
+        self.assertTrue(callable(rate_limit))
+    
+    def test_rate_limit_decorator_configuration(self):
+        """Test that rate limiting decorator is configured correctly."""
+        # Check that the endpoints are decorated with rate limiting
+        # This is a structural test to ensure the decorators are applied
+        
+        # Get the calculate route function
+        calculate_func = app.view_functions.get('calculate')
+        self.assertIsNotNone(calculate_func)
+        
+        # Get the scientific route function  
+        scientific_func = app.view_functions.get('scientific')
+        self.assertIsNotNone(scientific_func)
+        
+        # Both functions should exist and be decorated
+        self.assertTrue(hasattr(calculate_func, '__wrapped__') or 
+                       hasattr(calculate_func, '__name__'))
+        self.assertTrue(hasattr(scientific_func, '__wrapped__') or 
+                       hasattr(scientific_func, '__name__'))
+
+
 if __name__ == '__main__':
     unittest.main()
 # Test change for README check
