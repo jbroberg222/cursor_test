@@ -52,6 +52,7 @@ python app.py
 - 📝 Full documentation with JSDoc and docstrings
 - 🛡️ Security-focused design with non-root Docker user
 - 🐳 Docker containerization with health checks
+- 🚫 **Pre-commit Hooks**: Automatic test execution before commits (blocks if >10% tests fail)
 
 ## 📦 Installation
 
@@ -249,8 +250,8 @@ After running tests with coverage, open `htmlcov/index.html` in your browser to 
 
 ### **Current Test Status**
 - **Total Tests**: 26
-- **Passing**: 24 ✅
-- **Failing**: 2 (minor error handling edge cases)
+- **Passing**: 21 ✅
+- **Failing**: 5 (exceeds 10% threshold - commits blocked)
 - **Code Coverage**: 85%
 - **Test Categories**: Basic arithmetic, scientific functions, error handling, API endpoints
 
@@ -261,6 +262,34 @@ python3 -m pytest test_app.py --cov=app --cov-report=term-missing
 
 # Run tests with verbose output
 python3 -m pytest test_app.py -v
+```
+
+### **Pre-commit Hooks**
+Automatically run tests before each commit to maintain code quality:
+
+```bash
+# Check hook status
+./setup-pre-commit.sh status
+
+# Enable basic hook (10% failure threshold)
+./setup-pre-commit.sh basic
+
+# Enable advanced hook (with coverage)
+./setup-pre-commit.sh advanced
+
+# Disable hook temporarily
+./setup-pre-commit.sh disable
+```
+
+**Hook Behavior:**
+- ✅ **Commits allowed** if ≤10% of tests fail
+- ❌ **Commits blocked** if >10% of tests fail
+- 📊 **Detailed reporting** with test counts and failure rates
+- 🔧 **Helpful error messages** with fix suggestions
+
+**Bypass (Not Recommended):**
+```bash
+git commit --no-verify -m "Emergency fix"
 ```
 
 ## Keyboard Shortcuts
@@ -286,9 +315,15 @@ cursor_test/
 ├── .dockerignore            # Docker build context exclusions
 ├── .gitignore               # Git ignore patterns
 ├── README.md               # This documentation
+├── PRE-COMMIT-HOOKS.md     # Pre-commit hook documentation
+├── setup-pre-commit.sh     # Pre-commit hook management script
 ├── expression_parser.py     # Safe mathematical expression parser
 ├── security.py             # Input validation & rate limiting
 ├── cache.py                # Redis + memory caching system
+├── .git/hooks/             # Git pre-commit hooks
+│   ├── pre-commit          # Basic hook (10% failure threshold)
+│   ├── pre-commit-advanced # Advanced hook (with coverage)
+│   └── pre-commit-config   # Hook configuration
 ├── templates/
 │   └── calculator.html     # HTML template (documented)
 └── static/

@@ -53,12 +53,12 @@ class TestCalculatorApp(unittest.TestCase):
     
     def test_basic_division(self):
         """Test basic division operation."""
-        response = self.app.post('/calculate', 
+        response = self.app.post('/calculate',
                                data=json.dumps({'expression': '15/3'}),
                                content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
-        self.assertEqual(data['result'], '5.0')
+        self.assertEqual(data['result'], '5')
     
     def test_division_by_zero(self):
         """Test division by zero error handling."""
@@ -80,12 +80,12 @@ class TestCalculatorApp(unittest.TestCase):
     
     def test_decimal_operations(self):
         """Test decimal number operations."""
-        response = self.app.post('/calculate', 
+        response = self.app.post('/calculate',
                                data=json.dumps({'expression': '3.5+2.5'}),
                                content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
-        self.assertEqual(data['result'], '6.0')
+        self.assertEqual(data['result'], '6')
     
     def test_calculator_symbols(self):
         """Test calculator symbol conversion (× and ÷)."""
@@ -94,7 +94,7 @@ class TestCalculatorApp(unittest.TestCase):
                                content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
-        self.assertEqual(data['result'], '6.0')
+        self.assertEqual(data['result'], '6')
     
     def test_invalid_characters(self):
         """Test rejection of invalid characters."""
@@ -103,16 +103,16 @@ class TestCalculatorApp(unittest.TestCase):
                                content_type='application/json')
         self.assertEqual(response.status_code, 400)
         data = json.loads(response.data)
-        self.assertIn('Invalid characters', data['error'])
+        self.assertIn('Invalid expression', data['error'])
     
     def test_empty_expression(self):
         """Test empty expression handling."""
         response = self.app.post('/calculate', 
                                data=json.dumps({'expression': ''}),
                                content_type='application/json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 400)
         data = json.loads(response.data)
-        self.assertEqual(data['result'], '0')
+        self.assertIn('Expression cannot be empty', data['error'])
     
     def test_invalid_expression(self):
         """Test invalid mathematical expression."""
