@@ -39,7 +39,7 @@ python app.py
 - 🎯 Utility functions (absolute value, negate)
 - 📊 Side-by-side panel layout
 - 🎛️ Mode switching between basic and advanced
-- 🙃 **Upside-Down Mode**: Toggle button to flip all text characters upside-down for fun
+- 🙃 **Upside-Down Mode**: Toggle button to rotate entire calculator 180° for fun
 
 ### **Security & Performance**
 - 🛡️ **Enterprise Security**: Safe expression parser (no eval() vulnerabilities)
