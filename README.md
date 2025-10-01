@@ -668,3 +668,4 @@ This project now includes a pre-commit check to ensure the README is updated wit
 # Test comment for interactive version increment
 # Another test for version increment confirmation
 # Test commit with version increment denial and reason
+# Another test with proper reason for skipping version
