@@ -182,29 +182,9 @@ body {
     transform: rotate(180deg);
 }
 
-/* Upside-down text mode */
+/* Upside-down text mode - characters are flipped, no rotation needed */
 .upside-down-mode {
-    transform: rotate(180deg);
-}
-
-.upside-down-mode .display-text {
-    transform: rotate(180deg);
-}
-
-.upside-down-mode .mode-btn {
-    transform: rotate(180deg);
-}
-
-.upside-down-mode .btn {
-    transform: rotate(180deg);
-}
-
-.upside-down-mode .version {
-    transform: rotate(180deg);
-}
-
-.upside-down-mode .timestamp {
-    transform: rotate(180deg);
+    /* No transform needed - characters are individually flipped */
 }
 
 .display {

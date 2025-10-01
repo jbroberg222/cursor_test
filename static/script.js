@@ -183,7 +183,21 @@ function updateDisplay() {
     
     // Format the number for display
     const formattedValue = formatNumber(currentInput);
-    display.textContent = formattedValue;
+    
+    // Check if upside-down mode is active
+    const calculator = document.getElementById('calculator');
+    const isUpsideDown = calculator && calculator.classList.contains('upside-down-mode');
+    
+    if (isUpsideDown) {
+        // Store original text and display flipped version
+        if (!window.originalTexts) {
+            window.originalTexts = new Map();
+        }
+        window.originalTexts.set(display, formattedValue);
+        display.textContent = flipText(formattedValue);
+    } else {
+        display.textContent = formattedValue;
+    }
     
     console.log(`[DEBUG] updateDisplay() completed - Display now shows: "${display.textContent}"`);
 }
@@ -565,8 +579,34 @@ function switchMode(mode) {
 }
 
 /**
+ * Character mapping for upside-down text (flipped characters)
+ */
+const upsideDownChars = {
+    'a': 'ɐ', 'b': 'q', 'c': 'ɔ', 'd': 'p', 'e': 'ǝ', 'f': 'ɟ', 'g': 'ƃ', 'h': 'ɥ',
+    'i': 'ᴉ', 'j': 'ɾ', 'k': 'ʞ', 'l': 'l', 'm': 'ɯ', 'n': 'u', 'o': 'o', 'p': 'd',
+    'q': 'b', 'r': 'ɹ', 's': 's', 't': 'ʇ', 'u': 'n', 'v': 'ʌ', 'w': 'ʍ', 'x': 'x',
+    'y': 'ʎ', 'z': 'z',
+    'A': '∀', 'B': 'ᗺ', 'C': 'Ɔ', 'D': 'ᗡ', 'E': 'Ǝ', 'F': 'ᖴ', 'G': 'פ', 'H': 'H',
+    'I': 'I', 'J': 'ſ', 'K': 'ʞ', 'L': '˥', 'M': 'W', 'N': 'N', 'O': 'O', 'P': 'Ԁ',
+    'Q': 'Q', 'R': 'ᴿ', 'S': 'S', 'T': '┴', 'U': '∩', 'V': 'Λ', 'W': 'M', 'X': 'X',
+    'Y': '⅄', 'Z': 'Z',
+    '0': '0', '1': 'Ɩ', '2': 'ᄅ', '3': 'Ɛ', '4': 'ㄣ', '5': 'ϛ', '6': '9', '7': 'ㄥ',
+    '8': '8', '9': '6',
+    '.': '˙', ',': '\'', '!': '¡', '?': '¿', '(': ')', ')': '(', '[': ']', ']': '[',
+    '{': '}', '}': '{', '<': '>', '>': '<', '/': '\\', '\\': '/', '|': '|', '-': '-',
+    '+': '+', '×': '×', '÷': '÷', '=': '=', ' ': ' '
+};
+
+/**
+ * Flips text characters to upside-down equivalents
+ */
+function flipText(text) {
+    return text.split('').map(char => upsideDownChars[char] || char).join('');
+}
+
+/**
  * Toggles upside-down text mode for the entire calculator.
- * Rotates all text elements 180 degrees for a fun effect.
+ * Flips individual characters to create upside-down text effect.
  */
 function toggleUpsideDown() {
     console.log(`[DEBUG] toggleUpsideDown() called`);
@@ -583,15 +623,62 @@ function toggleUpsideDown() {
             console.log(`[DEBUG] toggleUpsideDown() - Disabling upside-down mode`);
             calculator.classList.remove('upside-down-mode');
             toggleBtn.classList.remove('active');
+            restoreOriginalText();
         } else {
             console.log(`[DEBUG] toggleUpsideDown() - Enabling upside-down mode`);
             calculator.classList.add('upside-down-mode');
             toggleBtn.classList.add('active');
+            flipAllText();
         }
         
         console.log(`[DEBUG] toggleUpsideDown() - Mode toggled successfully`);
     } else {
         console.log(`[DEBUG] toggleUpsideDown() - Required elements not found`);
+    }
+}
+
+/**
+ * Flips all text elements in the calculator
+ */
+function flipAllText() {
+    console.log(`[DEBUG] flipAllText() called`);
+    
+    // Store original text for restoration
+    if (!window.originalTexts) {
+        window.originalTexts = new Map();
+    }
+    
+    // Elements to flip
+    const elementsToFlip = [
+        'display', 'version', 'timestamp',
+        '.mode-btn', '.btn', '.btn-number', '.btn-operator', '.btn-function', 
+        '.btn-equals', '.btn-scientific', '.btn-memory', '.btn-constant'
+    ];
+    
+    elementsToFlip.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(element => {
+            if (!window.originalTexts.has(element)) {
+                window.originalTexts.set(element, element.textContent);
+            }
+            element.textContent = flipText(element.textContent);
+        });
+    });
+    
+    console.log(`[DEBUG] flipAllText() - Flipped ${elementsToFlip.length} element types`);
+}
+
+/**
+ * Restores original text from stored values
+ */
+function restoreOriginalText() {
+    console.log(`[DEBUG] restoreOriginalText() called`);
+    
+    if (window.originalTexts) {
+        window.originalTexts.forEach((originalText, element) => {
+            element.textContent = originalText;
+        });
+        console.log(`[DEBUG] restoreOriginalText() - Restored ${window.originalTexts.size} elements`);
     }
 }
 
