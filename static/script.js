@@ -141,7 +141,9 @@ function showVersionDialog() {
  * Updates the calculator display with the current input value.
  */
 function updateDisplay() {
+    console.log(`[DEBUG] updateDisplay() called - Setting display to: "${currentInput}"`);
     display.textContent = currentInput;
+    console.log(`[DEBUG] updateDisplay() completed - Display now shows: "${display.textContent}"`);
 }
 
 /**
@@ -149,10 +151,12 @@ function updateDisplay() {
  * Clears current input, operator, previous input, and resets display flag.
  */
 function clearAll() {
+    console.log(`[DEBUG] clearAll() called - Previous state: currentInput="${currentInput}", operator="${operator}", previousInput="${previousInput}", shouldResetDisplay=${shouldResetDisplay}`);
     currentInput = '0';
     operator = null;
     previousInput = null;
     shouldResetDisplay = false;
+    console.log(`[DEBUG] clearAll() completed - New state: currentInput="${currentInput}", operator="${operator}", previousInput="${previousInput}", shouldResetDisplay=${shouldResetDisplay}`);
     updateDisplay();
 }
 
@@ -160,7 +164,9 @@ function clearAll() {
  * Clears only the current entry, leaving operator and previous input intact.
  */
 function clearEntry() {
+    console.log(`[DEBUG] clearEntry() called - Previous currentInput: "${currentInput}", operator: "${operator}", previousInput: "${previousInput}"`);
     currentInput = '0';
+    console.log(`[DEBUG] clearEntry() completed - New currentInput: "${currentInput}"`);
     updateDisplay();
 }
 
@@ -169,10 +175,13 @@ function clearEntry() {
  * If only one character remains, resets to '0'.
  */
 function backspace() {
+    console.log(`[DEBUG] backspace() called - Previous currentInput: "${currentInput}" (length: ${currentInput.length})`);
     if (currentInput.length > 1) {
         currentInput = currentInput.slice(0, -1);
+        console.log(`[DEBUG] backspace() - Removed last character, new currentInput: "${currentInput}"`);
     } else {
         currentInput = '0';
+        console.log(`[DEBUG] backspace() - Reset to '0' (was single character)`);
     }
     updateDisplay();
 }
@@ -184,21 +193,28 @@ function backspace() {
  * @param {string} value - The character to append to the display
  */
 function appendToDisplay(value) {
+    console.log(`[DEBUG] appendToDisplay('${value}') called - Current state: currentInput="${currentInput}", shouldResetDisplay=${shouldResetDisplay}`);
+    
     if (shouldResetDisplay) {
+        console.log(`[DEBUG] appendToDisplay() - Resetting display (shouldResetDisplay was true)`);
         currentInput = '0';
         shouldResetDisplay = false;
     }
     
     if (value === '.' && currentInput.includes('.')) {
+        console.log(`[DEBUG] appendToDisplay() - Ignoring decimal point (already exists)`);
         return; // Prevent multiple decimal points
     }
     
     if (currentInput === '0' && value !== '.') {
+        console.log(`[DEBUG] appendToDisplay() - Replacing '0' with '${value}'`);
         currentInput = value;
     } else {
+        console.log(`[DEBUG] appendToDisplay() - Appending '${value}' to '${currentInput}'`);
         currentInput += value;
     }
     
+    console.log(`[DEBUG] appendToDisplay() completed - New currentInput: "${currentInput}"`);
     updateDisplay();
 }
 
@@ -209,13 +225,17 @@ function appendToDisplay(value) {
  * @param {string} op - The operator symbol (+, -, ×, ÷)
  */
 function setOperator(op) {
+    console.log(`[DEBUG] setOperator('${op}') called - Current state: operator="${operator}", previousInput="${previousInput}", currentInput="${currentInput}"`);
+    
     if (operator && previousInput !== null) {
+        console.log(`[DEBUG] setOperator() - Performing calculation before setting new operator`);
         calculate();
     }
     
     operator = op;
     previousInput = currentInput;
     shouldResetDisplay = true;
+    console.log(`[DEBUG] setOperator() completed - New state: operator="${operator}", previousInput="${previousInput}", shouldResetDisplay=${shouldResetDisplay}`);
 }
 
 /**
@@ -223,40 +243,54 @@ function setOperator(op) {
  * Handles basic arithmetic operations with proper error checking.
  */
 function calculate() {
+    console.log(`[DEBUG] calculate() called - State: operator="${operator}", previousInput="${previousInput}", currentInput="${currentInput}"`);
+    
     if (operator && previousInput !== null) {
         const prev = parseFloat(previousInput);
         const current = parseFloat(currentInput);
+        console.log(`[DEBUG] calculate() - Parsed values: prev=${prev}, current=${current}`);
+        
         let result;
         
         switch (operator) {
             case '+':
                 result = prev + current;
+                console.log(`[DEBUG] calculate() - Addition: ${prev} + ${current} = ${result}`);
                 break;
             case '-':
                 result = prev - current;
+                console.log(`[DEBUG] calculate() - Subtraction: ${prev} - ${current} = ${result}`);
                 break;
             case '×':
                 result = prev * current;
+                console.log(`[DEBUG] calculate() - Multiplication: ${prev} × ${current} = ${result}`);
                 break;
             case '÷':
                 if (current === 0) {
+                    console.log(`[DEBUG] calculate() - Division by zero error`);
                     showError('Division by zero');
                     return;
                 }
                 result = prev / current;
+                console.log(`[DEBUG] calculate() - Division: ${prev} ÷ ${current} = ${result}`);
                 break;
             default:
+                console.log(`[DEBUG] calculate() - Unknown operator: ${operator}`);
                 return;
         }
         
         // Round to avoid floating point precision issues
         result = Math.round(result * 10000000000) / 10000000000;
+        console.log(`[DEBUG] calculate() - Rounded result: ${result}`);
         
         currentInput = result.toString();
         operator = null;
         previousInput = null;
         shouldResetDisplay = true;
+        console.log(`[DEBUG] calculate() completed - New state: currentInput="${currentInput}", operator="${operator}", previousInput="${previousInput}"`);
         updateDisplay();
+    } else {
+        console.log(`[DEBUG] calculate() - No calculation performed (missing operator or previousInput)`);
     }
 }
 
@@ -265,8 +299,11 @@ function calculate() {
  * Provides server-side calculation with loading states and error handling.
  */
 async function calculateServer() {
+    console.log(`[DEBUG] calculateServer() called - State: currentInput="${currentInput}", operator="${operator}", previousInput="${previousInput}"`);
+    
     // Don't calculate if there's no meaningful input
     if (currentInput === '0' && !operator && !previousInput) {
+        console.log(`[DEBUG] calculateServer() - No calculation needed (no meaningful input)`);
         return;
     }
     
@@ -274,13 +311,16 @@ async function calculateServer() {
         // Show loading state
         const equalsBtn = document.querySelector('.btn-equals');
         equalsBtn.classList.add('loading');
+        console.log(`[DEBUG] calculateServer() - Added loading state to equals button`);
         
         // Build the complete expression
         let expression = currentInput;
         if (operator && previousInput !== null) {
             expression = previousInput + operator + currentInput;
         }
+        console.log(`[DEBUG] calculateServer() - Built expression: "${expression}"`);
         
+        console.log(`[DEBUG] calculateServer() - Sending POST request to /calculate`);
         const response = await fetch('/calculate', {
             method: 'POST',
             headers: {
@@ -289,25 +329,30 @@ async function calculateServer() {
             body: JSON.stringify({ expression: expression })
         });
         
+        console.log(`[DEBUG] calculateServer() - Received response: status=${response.status}`);
         const data = await response.json();
+        console.log(`[DEBUG] calculateServer() - Response data:`, data);
         
         if (response.ok) {
+            console.log(`[DEBUG] calculateServer() - Success! Result: "${data.result}"`);
             currentInput = data.result;
             operator = null;
             previousInput = null;
             shouldResetDisplay = true;
             updateDisplay();
         } else {
+            console.log(`[DEBUG] calculateServer() - Error: ${data.error}`);
             showError(data.error);
         }
         
     } catch (error) {
-        console.error('Error:', error);
+        console.error(`[DEBUG] calculateServer() - Network error:`, error);
         showError('Network error');
     } finally {
         // Remove loading state
         const equalsBtn = document.querySelector('.btn-equals');
         equalsBtn.classList.remove('loading');
+        console.log(`[DEBUG] calculateServer() - Removed loading state`);
     }
 }
 
@@ -331,46 +376,109 @@ function showError(message) {
     }, 2000);
 }
 
-// Keyboard support
-document.addEventListener('keydown', function(event) {
-    const key = event.key;
-    
-    if (key >= '0' && key <= '9' || key === '.') {
-        appendToDisplay(key);
-    } else if (key === '+' || key === '-') {
-        setOperator(key);
-    } else if (key === '*') {
-        setOperator('×');
-    } else if (key === '/') {
-        event.preventDefault();
-        setOperator('÷');
-    } else if (key === 'Enter' || key === '=') {
-        event.preventDefault();
-        calculateServer();
-    } else if (key === 'Escape' || key === 'c' || key === 'C') {
-        clearAll();
-    } else if (key === 'Backspace') {
-        backspace();
-    }
-});
+// Keyboard shortcuts removed - buttons only
 
-// Update button click handlers to use server calculation
+// Event delegation for all calculator buttons
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize the live timestamp
-    initializeTimestamp();
+    console.log(`[DEBUG] DOMContentLoaded event - Initializing calculator with event delegation`);
     
-    // Override the calculate function for the equals button
-    const equalsBtn = document.querySelector('.btn-equals');
-    equalsBtn.onclick = calculateServer;
+    // Initialize the live timestamp
+    console.log(`[DEBUG] DOMContentLoaded - Initializing timestamp`);
+    initializeTimestamp();
     
     // Add click handler for version number
     const versionElement = document.getElementById('version');
+    console.log(`[DEBUG] DOMContentLoaded - Found version element: ${!!versionElement}`);
     if (versionElement) {
         versionElement.addEventListener('click', showVersionDialog);
         versionElement.style.cursor = 'pointer';
+        console.log(`[DEBUG] DOMContentLoaded - Added version dialog click handler`);
     }
     
-    // Operator handlers are now set directly in HTML onclick attributes
+    // Event delegation for all calculator buttons
+    document.addEventListener('click', function(event) {
+        const button = event.target.closest('button');
+        if (!button) return;
+        
+        const action = button.dataset.action;
+        console.log(`[DEBUG] Button clicked - Action: "${action}", Button: "${button.textContent}"`);
+        
+        switch (action) {
+            case 'number':
+                const value = button.dataset.value;
+                console.log(`[DEBUG] Number button clicked - Value: "${value}"`);
+                appendToDisplay(value);
+                break;
+                
+            case 'operator':
+                const operator = button.dataset.operator;
+                console.log(`[DEBUG] Operator button clicked - Operator: "${operator}"`);
+                setOperator(operator);
+                break;
+                
+            case 'calculate':
+                console.log(`[DEBUG] Calculate button clicked`);
+                calculateServer();
+                break;
+                
+            case 'clear-all':
+                console.log(`[DEBUG] Clear All button clicked`);
+                clearAll();
+                break;
+                
+            case 'clear-entry':
+                console.log(`[DEBUG] Clear Entry button clicked`);
+                clearEntry();
+                break;
+                
+            case 'backspace':
+                console.log(`[DEBUG] Backspace button clicked`);
+                backspace();
+                break;
+                
+            case 'memory-clear':
+                console.log(`[DEBUG] Memory Clear button clicked`);
+                memoryClear();
+                break;
+                
+            case 'memory-recall':
+                console.log(`[DEBUG] Memory Recall button clicked`);
+                memoryRecall();
+                break;
+                
+            case 'memory-add':
+                console.log(`[DEBUG] Memory Add button clicked`);
+                memoryAdd();
+                break;
+                
+            case 'memory-subtract':
+                console.log(`[DEBUG] Memory Subtract button clicked`);
+                memorySubtract();
+                break;
+                
+            case 'scientific':
+                const functionName = button.dataset.function;
+                console.log(`[DEBUG] Scientific function button clicked - Function: "${functionName}"`);
+                scientificFunction(functionName);
+                break;
+                
+            default:
+                console.log(`[DEBUG] Unknown button action: "${action}"`);
+                break;
+        }
+    });
+    
+    // Event delegation for mode toggle buttons
+    document.addEventListener('click', function(event) {
+        const button = event.target.closest('.mode-btn');
+        if (!button) return;
+        
+        const mode = button.dataset.mode;
+        console.log(`[DEBUG] Mode toggle button clicked - Mode: "${mode}"`);
+        switchMode(mode);
+    });
+    
+    console.log(`[DEBUG] DOMContentLoaded - Event delegation setup complete`);
 });
 
 /**
@@ -384,20 +492,28 @@ document.addEventListener('DOMContentLoaded', function() {
  * @param {string} mode - The mode to switch to ('basic' or 'advanced')
  */
 function switchMode(mode) {
+    console.log(`[DEBUG] switchMode('${mode}') called - Current isAdvancedMode: ${isAdvancedMode}`);
+    
     const basicBtn = document.getElementById('basicMode');
     const advancedBtn = document.getElementById('advancedMode');
     const calculator = document.getElementById('calculator');
     
+    console.log(`[DEBUG] switchMode() - Found elements: basicBtn=${!!basicBtn}, advancedBtn=${!!advancedBtn}, calculator=${!!calculator}`);
+    
     if (mode === 'basic') {
+        console.log(`[DEBUG] switchMode() - Switching to basic mode`);
         isAdvancedMode = false;
         basicBtn.classList.add('active');
         advancedBtn.classList.remove('active');
         calculator.classList.remove('advanced-mode');
+        console.log(`[DEBUG] switchMode() - Basic mode activated - isAdvancedMode: ${isAdvancedMode}`);
     } else {
+        console.log(`[DEBUG] switchMode() - Switching to advanced mode`);
         isAdvancedMode = true;
         advancedBtn.classList.add('active');
         basicBtn.classList.remove('active');
         calculator.classList.add('advanced-mode');
+        console.log(`[DEBUG] switchMode() - Advanced mode activated - isAdvancedMode: ${isAdvancedMode}`);
     }
 }
 
@@ -409,15 +525,19 @@ function switchMode(mode) {
  * Clears the calculator memory.
  */
 function memoryClear() {
+    console.log(`[DEBUG] memoryClear() called - Previous memoryValue: ${memoryValue}`);
     memoryValue = 0;
+    console.log(`[DEBUG] memoryClear() completed - New memoryValue: ${memoryValue}`);
 }
 
 /**
  * Recalls the value stored in memory to the display.
  */
 function memoryRecall() {
+    console.log(`[DEBUG] memoryRecall() called - memoryValue: ${memoryValue}, currentInput: "${currentInput}"`);
     currentInput = memoryValue.toString();
     shouldResetDisplay = true;
+    console.log(`[DEBUG] memoryRecall() completed - New currentInput: "${currentInput}"`);
     updateDisplay();
 }
 
@@ -425,14 +545,20 @@ function memoryRecall() {
  * Adds the current display value to memory.
  */
 function memoryAdd() {
-    memoryValue += parseFloat(currentInput);
+    const valueToAdd = parseFloat(currentInput);
+    console.log(`[DEBUG] memoryAdd() called - Adding ${valueToAdd} to memory. Previous memoryValue: ${memoryValue}`);
+    memoryValue += valueToAdd;
+    console.log(`[DEBUG] memoryAdd() completed - New memoryValue: ${memoryValue}`);
 }
 
 /**
  * Subtracts the current display value from memory.
  */
 function memorySubtract() {
-    memoryValue -= parseFloat(currentInput);
+    const valueToSubtract = parseFloat(currentInput);
+    console.log(`[DEBUG] memorySubtract() called - Subtracting ${valueToSubtract} from memory. Previous memoryValue: ${memoryValue}`);
+    memoryValue -= valueToSubtract;
+    console.log(`[DEBUG] memorySubtract() completed - New memoryValue: ${memoryValue}`);
 }
 
 /**
@@ -447,8 +573,10 @@ function memorySubtract() {
  */
 async function scientificFunction(func) {
     const value = parseFloat(currentInput);
+    console.log(`[DEBUG] scientificFunction('${func}') called - Input value: ${value} (parsed from "${currentInput}")`);
     
     try {
+        console.log(`[DEBUG] scientificFunction() - Sending POST request to /scientific with function="${func}", value=${value}`);
         const response = await fetch('/scientific', {
             method: 'POST',
             headers: {
@@ -460,21 +588,27 @@ async function scientificFunction(func) {
             })
         });
         
+        console.log(`[DEBUG] scientificFunction() - Received response: status=${response.status}`);
         const data = await response.json();
+        console.log(`[DEBUG] scientificFunction() - Response data:`, data);
         
         if (response.ok) {
+            console.log(`[DEBUG] scientificFunction() - Success! Result: "${data.result}"`);
             currentInput = data.result;
             shouldResetDisplay = true;
             updateDisplay();
         } else {
+            console.log(`[DEBUG] scientificFunction() - Error: ${data.error}`);
             showError(data.error);
         }
         
     } catch (error) {
-        console.error('Error:', error);
+        console.error(`[DEBUG] scientificFunction() - Network error:`, error);
         showError('Network error');
     }
 }
 
 // Initialize display
+console.log(`[DEBUG] Script loaded - Initializing display`);
 updateDisplay();
+console.log(`[DEBUG] Calculator script fully loaded and ready`);
