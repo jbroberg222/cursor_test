@@ -582,13 +582,14 @@ cursor_test/
 
 ## 📋 Version Information
 
-### **Current Version: v 0.22**
+### **Current Version: v 1.0**
 - **Release Date**: September 30, 2025
 - **Status**: Stable Production Release
 - **Compatibility**: Python 3.8+, Modern Browsers
 
 ### **Version History**
-- **v 0.22** (Current) - Manual version update to 0.22 by user request
+- **v 1.0** (Current) - Major version milestone - comprehensive calculator with all features
+- **v 0.22** - Manual version update to 0.22 by user request
 - **v 0.9** - Added interactive version increment with reason prompt
 - **v 0.8** - Added number formatting with commas for better readability
 - **v 0.7** - Version reset by user decision - comprehensive rate limiting tests and verification
