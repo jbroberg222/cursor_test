@@ -400,6 +400,37 @@ Automatically run tests before each commit to maintain code quality:
 git commit --no-verify -m "Emergency fix"
 ```
 
+## 🔍 Static Code Analysis Pipeline
+
+The project now includes comprehensive static code analysis tools that run automatically before each commit:
+
+### **Analysis Tools:**
+- **📝 Flake8**: Code style and linting (PEP 8 compliance)
+- **🔒 Bandit**: Security vulnerability scanning
+- **🔍 MyPy**: Type checking and static analysis
+
+### **Configuration:**
+- **`.flake8`**: Flake8 configuration with lenient rules for development
+- **`.bandit`**: Bandit configuration skipping common false positives
+- **`mypy.ini`**: MyPy configuration with relaxed type checking
+
+### **Pre-commit Integration:**
+- **✅ Automatic**: Runs on every commit attempt
+- **⚠️ Non-blocking**: Issues are warnings, not commit blockers
+- **📊 Reporting**: Detailed output for each analysis tool
+- **🔄 Version Increment**: Still includes automatic version bumping
+
+### **Usage:**
+```bash
+# Run analysis tools manually
+python3 -m flake8 . --count --statistics
+python3 -m bandit -r . -f txt
+python3 -m mypy . --no-error-summary
+
+# Commit with analysis (automatic)
+git commit -m "your commit message"
+```
+
 ## 🕒 Live Timestamp Feature
 
 The calculator includes a live timestamp display that shows the current date and time:
@@ -547,8 +578,8 @@ cursor_test/
 
 ## 📋 Version Information
 
-### **Current Version: v 0.8**
-- **Release Date**: September 30, 2025, 2025, 2024
+### **Current Version: v 0.9**
+- **Release Date**: September 30, 2025, 2025, 2025, 2024
 - **Status**: Stable Production Release
 - **Compatibility**: Python 3.8+, Modern Browsers
 
