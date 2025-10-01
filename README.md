@@ -47,13 +47,14 @@ python app.py
 - 📊 **Monitoring**: Health checks, metrics endpoints, and structured logging
 
 ### **Testing & Quality**
-- ✅ Comprehensive unit test suite (26 tests, 21 passing)
-- 📊 85% code coverage with detailed reporting
+- ✅ Comprehensive unit test suite (34 tests, 34 passing)
+- 📊 84% code coverage with detailed reporting
 - 🔍 Advanced error handling and validation
 - 📝 Full documentation with JSDoc and docstrings
 - 🛡️ Security-focused design with non-root Docker user
 - 🐳 Docker containerization with health checks
 - 🚫 **Pre-commit Hooks**: Automatic test execution before commits (blocks if >10% tests fail)
+- 🧪 **Test Categories**: Basic arithmetic, scientific functions, security, caching, health checks, error handling
 
 ## 📦 Installation
 
@@ -250,11 +251,18 @@ python -m unittest test_app.TestScientificFunctions
 After running tests with coverage, open `htmlcov/index.html` in your browser to view detailed coverage reports.
 
 ### **Current Test Status**
-- **Total Tests**: 26
-- **Passing**: 26 ✅
+- **Total Tests**: 34
+- **Passing**: 34 ✅
 - **Failing**: 0 (0% failure rate - commits allowed)
-- **Code Coverage**: 85%
-- **Test Categories**: Basic arithmetic, scientific functions, error handling, API endpoints
+- **Code Coverage**: 84%
+- **Test Categories**: 
+  - Basic arithmetic operations (8 tests)
+  - Scientific functions (13 tests)
+  - Health & metrics endpoints (2 tests)
+  - Error handling (1 test)
+  - Security features (3 tests)
+  - Caching functionality (2 tests)
+  - API endpoints (5 tests)
 
 **Run Tests:**
 ```bash
@@ -263,7 +271,56 @@ python3 -m pytest test_app.py --cov=app --cov-report=term-missing
 
 # Run tests with verbose output
 python3 -m pytest test_app.py -v
+
+# Run specific test categories
+python3 -m pytest test_app.py::TestCalculatorApp -v  # Basic arithmetic
+python3 -m pytest test_app.py::TestScientificFunctions -v  # Scientific functions
+python3 -m pytest test_app.py::TestHealthAndMetrics -v  # Health & metrics
+python3 -m pytest test_app.py::TestSecurityFeatures -v  # Security features
+python3 -m pytest test_app.py::TestCachingFeatures -v  # Caching features
+python3 -m pytest test_app.py::TestErrorHandlers -v  # Error handling
 ```
+
+### **Test Categories Breakdown**
+
+#### **🧮 Basic Arithmetic Tests (8 tests)**
+- Addition, subtraction, multiplication, division
+- Complex expressions with parentheses
+- Decimal operations
+- Calculator symbol conversion (×, ÷)
+- Division by zero handling
+- Invalid character detection
+- Empty expression handling
+
+#### **🔬 Scientific Function Tests (13 tests)**
+- Trigonometric functions (sin, cos, tan)
+- Logarithmic functions (log, ln)
+- Square root and power functions
+- Factorial calculations
+- Absolute value and negation
+- Error handling for invalid inputs
+- Edge cases (negative numbers, zero, large values)
+
+#### **🏥 Health & Metrics Tests (2 tests)**
+- Health check endpoint (`/health`)
+- Metrics endpoint (`/metrics`)
+- Service status validation
+- Performance metrics collection
+
+#### **🛡️ Security Feature Tests (3 tests)**
+- Input validation for missing fields
+- Invalid JSON handling
+- Non-JSON request rejection
+- Content-Type validation
+
+#### **⚡ Caching Tests (2 tests)**
+- Calculation result caching
+- Scientific function result caching
+- Cache hit/miss validation
+
+#### **❌ Error Handling Tests (1 test)**
+- 404 error handling
+- Proper error message formatting
 
 ### **Pre-commit Hooks**
 Automatically run tests before each commit to maintain code quality:
@@ -323,7 +380,7 @@ The calculator includes a live timestamp display that shows the current date and
 ```
 cursor_test/
 ├── app.py                    # Flask application with security & caching
-├── test_app.py              # Unit tests (26 tests, 85% coverage)
+├── test_app.py              # Unit tests (34 tests, 84% coverage)
 ├── run_tests.py             # Test runner script
 ├── requirements.txt         # Python dependencies (including Redis)
 ├── Dockerfile               # Development Docker container
@@ -332,7 +389,7 @@ cursor_test/
 ├── docker-compose.prod.yml  # Production deployment with Redis
 ├── .dockerignore            # Docker build context exclusions
 ├── .gitignore               # Git ignore patterns
-├── README.md               # This documentation
+├── README.md               # This comprehensive documentation
 ├── PRE-COMMIT-HOOKS.md     # Pre-commit hook documentation
 ├── setup-pre-commit.sh     # Pre-commit hook management script
 ├── expression_parser.py     # Safe mathematical expression parser
@@ -343,10 +400,10 @@ cursor_test/
 │   ├── pre-commit-advanced # Advanced hook (with coverage)
 │   └── pre-commit-config   # Hook configuration
 ├── templates/
-│   └── calculator.html     # HTML template (documented)
+│   └── calculator.html     # HTML template with timestamp & version
 └── static/
-    ├── style.css           # CSS styles (documented)
-    └── script.js           # JavaScript functionality (documented)
+    ├── style.css           # CSS styles with glassmorphism & responsive design
+    └── script.js           # JavaScript with live timestamp & version dialog
 ```
 
 ## 🔌 API Documentation
@@ -438,6 +495,31 @@ cursor_test/
 }
 ```
 
+## 📋 Version Information
+
+### **Current Version: v 0.5**
+- **Release Date**: September 30, 2024
+- **Status**: Stable Production Release
+- **Compatibility**: Python 3.8+, Modern Browsers
+
+### **Version History**
+- **v 0.5** (Current) - Added live timestamp, version dialog, comprehensive testing
+- **v 0.4** - Added pre-commit hooks, security enhancements, caching system
+- **v 0.3** - Added advanced calculator mode, scientific functions, memory operations
+- **v 0.2** - Added Docker containerization, production deployment
+- **v 0.1** - Initial release with basic calculator functionality
+
+### **Changelog**
+#### **v 0.5 Features:**
+- ✅ Live timestamp display with real-time updates
+- ✅ Version dialog with attribution information
+- ✅ Comprehensive test suite (34 tests, 84% coverage)
+- ✅ Enhanced security testing and validation
+- ✅ Caching functionality testing
+- ✅ Health check and metrics endpoint testing
+- ✅ Error handling improvements
+- ✅ Updated documentation and README
+
 ## Technologies Used
 
 - **Backend**: Python Flask with Gunicorn WSGI server
@@ -449,6 +531,7 @@ cursor_test/
 - **Deployment**: Docker with multi-stage builds, Docker Compose
 - **Testing**: pytest with coverage reporting
 - **Fonts**: Google Fonts (Inter)
+- **Version Control**: Git with pre-commit hooks
 
 ## Browser Support
 

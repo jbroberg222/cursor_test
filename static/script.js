@@ -53,6 +53,91 @@ function initializeTimestamp() {
 }
 
 /**
+ * Shows a dialog with version information and credits.
+ * Displays a modal dialog with attribution message.
+ */
+function showVersionDialog() {
+    // Create modal overlay
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    `;
+    
+    // Create dialog box
+    const dialog = document.createElement('div');
+    dialog.style.cssText = `
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 16px;
+        padding: 32px;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        max-width: 400px;
+        margin: 20px;
+        color: white;
+        font-family: 'Inter', sans-serif;
+    `;
+    
+    // Create dialog content
+    dialog.innerHTML = `
+        <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 600;">Calculator v 0.5</h3>
+        <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.5; opacity: 0.9;">
+            Brought to you by Jeff Broberg and his buddy cursor.ai
+        </p>
+        <button id="closeDialog" style="
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        ">Close</button>
+    `;
+    
+    // Add dialog to overlay
+    overlay.appendChild(dialog);
+    
+    // Add overlay to body
+    document.body.appendChild(overlay);
+    
+    // Add close functionality
+    const closeBtn = dialog.querySelector('#closeDialog');
+    const closeDialog = () => {
+        document.body.removeChild(overlay);
+    };
+    
+    closeBtn.addEventListener('click', closeDialog);
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            closeDialog();
+        }
+    });
+    
+    // Add hover effect to close button
+    closeBtn.addEventListener('mouseenter', () => {
+        closeBtn.style.background = 'rgba(255, 255, 255, 0.3)';
+    });
+    closeBtn.addEventListener('mouseleave', () => {
+        closeBtn.style.background = 'rgba(255, 255, 255, 0.2)';
+    });
+}
+
+/**
  * Updates the calculator display with the current input value.
  */
 function updateDisplay() {
@@ -277,6 +362,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Override the calculate function for the equals button
     const equalsBtn = document.querySelector('.btn-equals');
     equalsBtn.onclick = calculateServer;
+    
+    // Add click handler for version number
+    const versionElement = document.getElementById('version');
+    if (versionElement) {
+        versionElement.addEventListener('click', showVersionDialog);
+        versionElement.style.cursor = 'pointer';
+    }
     
     // Operator handlers are now set directly in HTML onclick attributes
 });
