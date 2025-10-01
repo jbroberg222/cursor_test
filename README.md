@@ -390,6 +390,9 @@ Automatically run tests before each commit to maintain code quality:
 ```
 
 **Hook Behavior:**
+- **Interactive Version Increment**: Asks for user confirmation before incrementing version
+- **Reason Prompt**: When version increment is denied, asks for a reason
+- **User Control**: You decide when to increment versions (y/n prompt)
 - ✅ **Commits allowed** if ≤10% of tests fail
 - ❌ **Commits blocked** if >10% of tests fail
 - 📊 **Detailed reporting** with test counts and failure rates
