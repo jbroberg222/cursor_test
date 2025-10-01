@@ -10,6 +10,8 @@ docker run -p 5001:5000 calculator-app
 # Open http://localhost:5001
 ```
 
+**Note**: Port 5000 is used by macOS AirPlay Receiver, so we use port 5001 for local access.
+
 **Local Development:**
 ```bash
 pip install -r requirements.txt
@@ -145,21 +147,36 @@ python app.py
 # Production with Redis caching
 docker-compose -f docker-compose.prod.yml up --build
 
-# Production Docker image
+# Production Docker image (multi-stage build)
 docker build -f Dockerfile.prod -t calculator-app-prod .
 docker run -p 5000:5000 calculator-app-prod
+
+# Production with resource limits and logging
+docker-compose -f docker-compose.prod.yml up -d --build
 ```
+
+**Production Features:**
+- **Multi-stage build** for optimized image size
+- **Gunicorn WSGI server** with 4 workers
+- **Redis caching** with persistence
+- **Resource limits**: 512MB RAM, 0.5 CPU
+- **Logging**: JSON format with rotation
+- **Health checks**: `/health` endpoint monitoring
+- **Security**: Non-root user execution
 
 ### **Development Deployment**
 ```bash
 # Build the Docker image
 docker build -t calculator-app .
 
-# Run the container
+# Run the container (using port 5001 to avoid macOS AirPlay conflict)
 docker run -p 5001:5000 calculator-app
 
 # Run with Docker Compose
 docker-compose up --build
+
+# Check container status
+docker ps
 ```
 
 ### **Development with Docker**
@@ -185,30 +202,63 @@ docker ps
 
 # View health check logs
 docker inspect calculator-app
+
+# View container logs
+docker logs calculator-app
 ```
+
+**Health Check Configuration:**
+- **Development**: Checks `http://localhost:5000/` every 30s
+- **Production**: Checks `http://localhost:5000/health` every 30s
+- **Timeout**: 10s
+- **Retries**: 3 attempts
+- **Start Period**: 40s (allows app startup time)
 
 ### **Current Docker Status**
 - **Container Name**: `calculator-app`
-- **Image**: `calculator-app:latest`
+- **Image**: `calculator-app:latest` (310MB)
 - **Port Mapping**: `0.0.0.0:5001->5000/tcp`
-- **Status**: ✅ Running and accessible
-- **URL**: `http://localhost:5001`
-- **Health**: Container running (health check may show as starting)
+- **Status**: ⏸️ Stopped (last run 7 minutes ago)
+- **URL**: `http://localhost:5001` (when running)
+- **Health**: Health check configured for `/health` endpoint
 
 **Quick Docker Commands:**
 ```bash
 # Check running containers
 docker ps
 
+# Check all containers (including stopped)
+docker ps -a
+
 # View container logs
 docker logs calculator-app
+
+# Start the container
+docker start calculator-app
 
 # Stop the container
 docker stop calculator-app
 
 # Remove the container
 docker rm calculator-app
+
+# Remove the image
+docker rmi calculator-app
+
+# View image details
+docker images calculator-app
 ```
+
+### **Docker Images Available**
+- **calculator-app:latest** (310MB) - Development image
+- **cursor_test-calculator:latest** (310MB) - Docker Compose image
+- **calculator-app-prod** - Production image (when built)
+
+### **Port Configuration**
+- **Container Internal Port**: 5000
+- **Host Port**: 5001 (to avoid macOS AirPlay Receiver conflict on 5000)
+- **Access URL**: `http://localhost:5001`
+- **Production**: Uses port 5000 internally with Gunicorn WSGI server
 
 ## 🚀 Running the Application
 
