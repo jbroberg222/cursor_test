@@ -171,3 +171,4 @@ except ImportError:
 def get_cache_manager() -> CacheManager:
     """Get the global cache manager instance."""
     return cache_manager
+# Test change for README check
