@@ -93,7 +93,7 @@ function showVersionDialog() {
     
     // Create dialog content
     dialog.innerHTML = `
-        <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 600;">Calculator v 0.15</h3>
+        <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 600;">Calculator v 0.16</h3>
         <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.5; opacity: 0.9;">
             Brought to you by Jeff Broberg and his buddy cursor.ai
         </p>

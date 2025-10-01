@@ -578,8 +578,8 @@ cursor_test/
 
 ## 📋 Version Information
 
-### **Current Version: v 0.15**
-- **Release Date**: September 30, 2025, 2025, 2025, 2025, 2025, 2025, 2025, 2025, 2025, 2024
+### **Current Version: v 0.16**
+- **Release Date**: September 30, 2025, 2025, 2025, 2025, 2025, 2025, 2025, 2025, 2025, 2025, 2024
 - **Status**: Stable Production Release
 - **Compatibility**: Python 3.8+, Modern Browsers
 
@@ -629,3 +629,21 @@ This project is open source and available under the MIT License.
 ## 📚 README Documentation Check
 
 This project now includes a pre-commit check to ensure the README is updated with meaningful documentation for each commit.
+
+### **Features:**
+- **✅ Automatic Check**: Verifies README.md is modified in each commit
+- **📝 Content Analysis**: Distinguishes between meaningful changes and auto-generated version updates
+- **⚠️ Smart Warnings**: Warns when only version changes are present but allows commits to proceed
+- **🔧 Helpful Guidance**: Provides suggestions for what to document
+
+### **Check Behavior:**
+- **✅ Meaningful Changes**: Commits with substantial README updates pass without warnings
+- **⚠️ Version-Only Changes**: Commits with only auto-generated version updates show warnings but proceed
+- **❌ No README Changes**: Commits without README updates are blocked with helpful instructions
+
+### **What to Document:**
+- **🆕 New Features**: Describe new functionality and how to use it
+- **⚙️ Configuration Changes**: Document setup or configuration modifications
+- **🚨 Breaking Changes**: Note any changes that might affect existing users
+- **📖 Usage Examples**: Add examples or improved instructions
+- **🔧 Bug Fixes**: Document important fixes and their impact
