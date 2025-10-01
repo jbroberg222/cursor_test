@@ -579,8 +579,8 @@ cursor_test/
 
 ## 📋 Version Information
 
-### **Current Version: v 0.8**
-- **Release Date**: September 30, 2025, 2025
+### **Current Version: v 0.9**
+- **Release Date**: September 30, 2025, 2025, 2025
 - **Status**: Stable Production Release
 - **Compatibility**: Python 3.8+, Modern Browsers
 
