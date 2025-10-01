@@ -91,6 +91,26 @@ body {
     display: block;
 }
 
+.timestamp {
+    text-align: center;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(0, 0, 0, 0.1);
+    padding: 8px 16px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.timestamp:hover {
+    background: rgba(0, 0, 0, 0.15);
+    color: rgba(255, 255, 255, 0.9);
+}
+
 .mode-toggle {
     display: flex;
     gap: 8px;

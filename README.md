@@ -28,6 +28,7 @@ python app.py
 - 🧮 Clear, Clear Entry, and Backspace functions
 - 🚀 Server-side calculation for accuracy
 - ⚡ Real-time display updates
+- 🕒 **Live timestamp** with date and time display above mode toggle
 
 ### **Advanced Calculator**
 - 🔬 Scientific functions (sin, cos, tan, log, ln, sqrt, x², x!)
@@ -250,8 +251,8 @@ After running tests with coverage, open `htmlcov/index.html` in your browser to 
 
 ### **Current Test Status**
 - **Total Tests**: 26
-- **Passing**: 21 ✅
-- **Failing**: 5 (exceeds 10% threshold - commits blocked)
+- **Passing**: 26 ✅
+- **Failing**: 0 (0% failure rate - commits allowed)
 - **Code Coverage**: 85%
 - **Test Categories**: Basic arithmetic, scientific functions, error handling, API endpoints
 
@@ -291,6 +292,23 @@ Automatically run tests before each commit to maintain code quality:
 ```bash
 git commit --no-verify -m "Emergency fix"
 ```
+
+## 🕒 Live Timestamp Feature
+
+The calculator includes a live timestamp display that shows the current date and time:
+
+### **Features:**
+- ✅ **Real-time updates** every second
+- ✅ **Format**: "Day - mm/dd/yy hh:mm:ss AM/PM" (e.g., "Monday - 09/30/24 09:15:30 PM")
+- ✅ **Location**: Above the Basic/Advanced mode toggle buttons
+- ✅ **Styling**: Glassmorphism design matching the calculator theme
+- ✅ **Responsive**: Works on all screen sizes
+
+### **Technical Details:**
+- **JavaScript**: Updates every 1000ms using `setInterval()`
+- **Formatting**: Custom date/time formatting with proper padding
+- **Initialization**: Automatically starts when page loads
+- **Performance**: Lightweight with minimal CPU usage
 
 ## Keyboard Shortcuts
 

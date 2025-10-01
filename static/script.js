@@ -20,6 +20,39 @@ let memoryValue = 0;
 let isAdvancedMode = false;
 
 /**
+ * Updates the live timestamp display.
+ * Formats the current date and time in "Day - mm/dd/yy hh:mm:ss AM/PM" format.
+ */
+function updateTimestamp() {
+    const timestampElement = document.getElementById('timestamp');
+    if (timestampElement) {
+        const now = new Date();
+        const dayOptions = { weekday: 'long' };
+        const day = now.toLocaleDateString('en-US', dayOptions);
+        
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const dayNum = String(now.getDate()).padStart(2, '0');
+        const year = String(now.getFullYear()).slice(-2);
+        
+        const hours = String(now.getHours() % 12 || 12).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
+        
+        timestampElement.textContent = `${day} - ${month}/${dayNum}/${year} ${hours}:${minutes}:${seconds} ${ampm}`;
+    }
+}
+
+/**
+ * Initializes the timestamp and sets up automatic updates.
+ * Updates every second to show live time.
+ */
+function initializeTimestamp() {
+    updateTimestamp(); // Initial update
+    setInterval(updateTimestamp, 1000); // Update every second
+}
+
+/**
  * Updates the calculator display with the current input value.
  */
 function updateDisplay() {
@@ -238,6 +271,9 @@ document.addEventListener('keydown', function(event) {
 
 // Update button click handlers to use server calculation
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize the live timestamp
+    initializeTimestamp();
+    
     // Override the calculate function for the equals button
     const equalsBtn = document.querySelector('.btn-equals');
     equalsBtn.onclick = calculateServer;
